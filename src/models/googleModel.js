@@ -1,4 +1,4 @@
-import { GoogleGenerativeAI } from '@google/generative-ai';
+import { GoogleGenerativeAI, HarmCategory, HarmBlockThreshold } from '@google/generative-ai';
 import fs from 'fs-extra';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -58,12 +58,20 @@ async function geminiTranslate(text, sourceLang, mode) {
   try {
     // Get the Gemini model
     const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
+
+    // Config
+    const generationConfig = {
+      temperature: 0.5,
+      topP: 0.5,
+      topK: 40,
+      maxOutputTokens: 8192,
+    };
     
     // Combine system prompt and user query
     const fullPrompt = `${systemPrompt}\n\n${userPrompt}`;
     
     // Generate content
-    const result = await model.generateContent(fullPrompt);
+    const result = await model.generateContent(fullPrompt, generationConfig);
     const translation = result.response.text().trim();
     
     // Gemini doesn't provide token counts, so we'll estimate based on the length of the text
