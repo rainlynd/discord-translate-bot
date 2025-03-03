@@ -8,6 +8,7 @@
 !.env.example
 
 # Dependencies
+memory-bank
 node_modules
 npm-debug.log
 

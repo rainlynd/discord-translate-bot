@@ -3,6 +3,7 @@
 
 # Dependency directories
 node_modules/
+memory-bank/
 
 # Optional npm cache directory
 .npm
@@ -15,6 +16,7 @@ data/servers/
 logs
 *.log
 npm-debug.log*
+repomix-output.txt
 
 # Runtime data
 pids
