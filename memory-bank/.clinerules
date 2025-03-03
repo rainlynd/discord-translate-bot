@@ -1,0 +1,150 @@
+# Discord Translation Bot - Project Rules and Patterns
+
+## Coding Patterns
+
+### Module Structure
+- All files use ES Modules (`import`/`export`) not CommonJS (`require`/`module.exports`)
+- Entry point is `src/index.js`
+- Commands are in `src/commands/` with each command in a separate file
+- Events are in `src/events/` with each event in a separate file
+- Model adapters are in `src/models/` with one file per provider
+- Utility functions are in `src/utils/`
+
+### Exports Pattern
+- Each command exports a default object with `{ name, execute }` structure
+- Each event exports a default object with `{ name, once, execute }` structure
+- Service modules export named functions (not default exports)
+- Model adapters export named functions for their translation capabilities
+
+### Async/Await Usage
+- The codebase consistently uses async/await pattern for asynchronous operations
+- Promise chaining is minimized in favor of cleaner async/await syntax
+- Error handling uses try/catch blocks for async operations
+
+### Discord.js Patterns
+- Client object passed as parameter to event handlers
+- Commands and events dynamically loaded from directories
+- Discord intents explicitly defined for required functionality
+- Reaction operations use non-blocking approach when possible
+
+## File Structure
+
+### Configuration
+- Global settings in `config/default.json`
+- Environment variables in `.env` (from `.env.example` template)
+- Server configurations stored in `data/servers/[serverId].json`
+- Translation memory stored in `data/translations.json`
+
+### Directory Conventions
+- Source code in `src/` directory
+- Documentation in markdown files at root level
+- Docker files at root level
+- Test and diagnostic scripts at root level
+
+## Command Line Workflow
+
+### Development
+- Run development mode: `npm run dev` (uses nodemon)
+- Run production mode: `npm start` or `node src/index.js`
+
+### Docker Operations
+- Build: `docker-compose build`
+- Start: `docker-compose up -d`
+- Stop: `docker-compose down`
+- Logs: `docker-compose logs -f`
+
+### Maintenance Scripts
+- Health check: `node health-check.js`
+- Diagnostics: `node diagnose.js`
+- API key testing: `node test-api-keys.js`
+- Dependency check: `node check-dependencies.js`
+- Data structure check: `node check-data-structure.js`
+
+## Implementation Preferences
+
+### Error Handling
+- Non-blocking error handling for non-critical operations
+- Detailed error logging to console
+- User-friendly error messages for Discord responses
+- Visual error indicators using emoji reactions
+
+### Performance Optimization
+- Use webhooks instead of message.reply() when possible
+- Background processing for non-critical operations
+- Cached values for frequently accessed settings
+- Translation memory for reducing API calls
+- Batched disk I/O operations
+
+### Discord Messaging
+- Prefer webhooks for faster responses
+- Use formatted messages with clear indicators
+- Emoji reactions as visual status indicators
+- Split large messages by natural boundaries (paragraphs, sentences)
+
+## Project-Specific Knowledge
+
+### Translation Workflow
+1. Message received → check active session
+2. Language detection (LLM-based)
+3. Translation decision based on mode and detected language
+4. Check translation memory first
+5. API translation if needed
+6. Format and send response
+7. Update statistics
+
+### Language Modes
+- Korean mode: Korean ↔ English, Japanese → Korean
+- Japanese mode: Japanese ↔ English, Korean → Japanese
+
+### Command Usage
+- `!start` - Begin translation session in channel
+- `!end` - End translation session
+- `!mode korean|japanese` - Set language mode
+- `!model gpt4o|claude|gemini` - Set AI model
+- `!stats` - Show translation statistics
+- `!help` - Display help information
+
+### API Integration Details
+- OpenAI: GPT-4o for translation, GPT-4o-mini for detection
+- Anthropic: Claude 3.7 Sonnet model
+- Google: Gemini 2.0 Flash model
+
+## Known Edge Cases
+
+### Message Handling
+- Very short messages (1-3 chars) can have detection issues
+- Unicode emoji should be preserved in translations
+- Discord custom emojis are filtered out during preprocessing
+- URLs are filtered during preprocessing to reduce token usage
+- Messages over 2000 chars split with part indicators [Part 1/2]
+
+### API Behavior
+- OpenAI provides accurate token counts
+- Claude and Gemini token counts are estimated based on text length
+- API rate limits require queue management during high traffic
+- API errors should trigger webhook fallback to regular messages
+
+### Server Configuration
+- Default settings apply if server config is missing
+- First-time `!start` creates server config with defaults
+- Statistics track at both session and server levels
+
+## Contributing Guidelines
+
+### Code Style
+- Use consistent ES Module syntax
+- Follow existing error handling patterns
+- Include detailed comments for complex logic
+- Use descriptive variable and function names
+
+### Testing
+- Test new features with both Korean and Japanese workflows
+- Verify behavior with cached translations
+- Check error handling by simulating API failures
+- Ensure compatibility with existing commands
+
+### Documentation
+- Update README.md for user-facing changes
+- Add technical details to relevant documentation files
+- Document API changes in code comments
+- Include examples for new features

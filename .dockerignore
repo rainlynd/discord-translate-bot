@@ -1,0 +1,40 @@
+# Version control
+.git
+.gitignore
+
+# Environment variables
+.env
+.env.*
+!.env.example
+
+# Dependencies
+node_modules
+npm-debug.log
+
+# Local data and logs
+data/*
+logs/*
+
+# Build artifacts
+dist
+build
+
+# Editor files
+.vscode
+.idea
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Docker files (no need to include in the build)
+Dockerfile
+docker-compose.yml
+.dockerignore
+
+# Debug files
+debug.js
+diagnose.js
+test*.js
