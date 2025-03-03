@@ -100,8 +100,8 @@ async function openaiTranslate(text, sourceLang, mode) {
           content: userPrompt
         }
       ],
-      temperature: 0.7,
-      max_tokens: 1000
+      temperature: 0.5,
+      top_p: 0.5,
     });
     
     const translation = response.choices[0].message.content.trim();
