@@ -160,13 +160,9 @@ function getTargetLanguage(sourceLang, mode) {
   return 'eng'; // default
 }
 
-// Format translation result for display - Only show tokens for non-cached translations
+// Format translation result
 function formatTranslation(result) {
-  if (result.model === 'cache') {
-    return `${result.translated}`;
-  } else {
-    return `${result.translated}\n📊 Tokens: ${result.tokens.total}`;
-  }
+  return `${result.translated}`;
 }
 
 // Translate a message
