@@ -17,6 +17,7 @@
 | Long Message Handling | ✅ Complete | Content preprocessing, intelligent message splitting |
 | LLM Language Detection | ✅ Complete | Replaced franc with LLM-based detection |
 | Performance Optimizations | ✅ Complete | Non-blocking operations, parallel processing, caching |
+| OCR Integration | ✅ Complete | PaddleOCR with multi-language support for image text extraction |
 | Documentation | ✅ Complete | Installation guide, Docker guide, troubleshooting, update notes |
 | Error Handling | ✅ Complete | Graceful handling of errors, appropriate user feedback |
 | Test Scripts | ✅ Complete | API key validation, language detection testing, health checks |
@@ -35,6 +36,11 @@
 - ✅ Multiple AI model support (GPT-4o, Claude, Gemini)
 - ✅ Translation memory for cached responses
 - ✅ Multi-server support with server-specific configurations
+- ✅ OCR for image text extraction
+  - Korean, Japanese, and English text recognition
+  - Image preprocessing for better accuracy
+  - OCR result caching
+  - Visual feedback with emoji reactions
 
 ### User Interface
 - ✅ Command system for controlling the bot
@@ -42,6 +48,7 @@
 - ✅ Formatted translations with language indicators
 - ✅ Statistics tracking and reporting
 - ✅ Help system with command explanations
+- ✅ OCR processing status indicators
 
 ### Performance Features
 - ✅ Webhook-based responses for speed
@@ -49,6 +56,8 @@
 - ✅ Long message splitting for content exceeding Discord limits
 - ✅ Translation request queueing with concurrency control
 - ✅ Optimized disk I/O for translation memory
+- ✅ Parallel image processing for multiple attachments
+- ✅ OCR result caching for improved performance
 
 ### Deployment Options
 - ✅ Standard Node.js deployment
@@ -59,8 +68,8 @@
 
 ### Short Term
 - 🔄 Comprehensive test suite beyond basic scripts
-- 🔄 Enhanced error tracking and reporting
-- 🔄 Advanced rate limit handling
+- 🔄 Enhanced OCR performance monitoring
+- 🔄 Advanced error tracking and reporting
 - 🔄 Performance metrics dashboard
 
 ### Medium Term
@@ -68,33 +77,57 @@
 - ⏳ Additional user configuration options
 - ⏳ Server-specific system prompts
 - ⏳ Enhanced analytics for usage patterns
+- ⏳ OCR improvements for edge cases
 
 ### Long Term
 - ⏳ Support for additional languages
 - ⏳ Voice channel integration
 - ⏳ Administrative web dashboard
 - ⏳ Integration with other language tools
+- ⏳ Custom OCR model training for improved accuracy
 
 ## Current Status
 
-The Discord Translation Bot is in a fully functional state with all core features implemented. It can be deployed using either standard Node.js or Docker methods and provides real-time translation services between English, Korean, and Japanese.
+The Discord Translation Bot is in a fully functional state with all core features implemented, including the new OCR capabilities. It can be deployed using either standard Node.js or Docker methods and provides real-time translation services between English, Korean, and Japanese, with added support for extracting text from images.
 
-Recent upgrades to LLM-based language detection and long message handling have enhanced the user experience and translation accuracy. The bot is currently stable and ready for production use, with a focus on improving testing, monitoring, and edge case handling.
+Recent additions of OCR functionality and improvements to image handling have enhanced the bot's capabilities. The focus is now on monitoring OCR performance, optimizing resource usage, and improving the testing suite.
 
 ## Known Issues
 
-1. **Very short messages** - Detection accuracy can be lower for very short messages (1-3 characters)
-2. **Mixed language messages** - While improved with LLM detection, still challenging in some cases
-3. **Rate limiting** - Under heavy load, might encounter rate limits from API providers
-4. **Memory usage** - Translation memory can grow large with extensive usage
-5. **Webhook permissions** - Requires appropriate permissions in Discord for optimal performance
-6. **API costs** - Significant usage could lead to substantial API costs
+1. **Very short messages**
+   - Detection accuracy can be lower for very short messages (1-3 characters)
+   - OCR accuracy may be reduced for very small text in images
+
+2. **Mixed language content**
+   - While improved with LLM detection, still challenging in some cases
+   - OCR may have difficulty with mixed language images
+
+3. **Rate limiting**
+   - Under heavy load, might encounter rate limits from API providers
+   - Multiple image processing may impact performance
+
+4. **Memory usage**
+   - Translation memory can grow large with extensive usage
+   - OCR models and cache increase memory requirements
+
+5. **Webhook permissions**
+   - Requires appropriate permissions in Discord for optimal performance
+
+6. **API costs**
+   - Significant usage could lead to substantial API costs
+   - OCR processing adds to computational overhead
+
+7. **Image processing**
+   - Complex backgrounds may affect OCR accuracy
+   - Handwritten text recognition has limitations
+   - Vertical text detection needs optimization
 
 ## Next Milestone
 
 The next development milestone focuses on:
 
-1. Creating a comprehensive test suite for all components
-2. Implementing enhanced monitoring for rate limits and errors
-3. Optimizing API usage patterns for cost efficiency
-4. Adding more detailed usage analytics
+1. Creating a comprehensive test suite for all components including OCR
+2. Implementing enhanced monitoring for OCR performance and rate limits
+3. Optimizing API and resource usage patterns for cost efficiency
+4. Adding more detailed usage analytics for OCR and translation services
+5. Improving OCR accuracy for edge cases and mixed language content

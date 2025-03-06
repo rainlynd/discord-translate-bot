@@ -16,3 +16,10 @@ services:
     volumes:
       - ./data:/usr/src/app/data
       - ./logs:/usr/src/app/logs
+      - ./tessdata:/usr/src/app/tessdata
+    deploy:
+      resources:
+        limits:
+          memory: 2G
+        reservations:
+          memory: 1G

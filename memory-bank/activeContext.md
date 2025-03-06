@@ -2,80 +2,137 @@
 
 ## Current Work Focus
 
-The Discord Translation Bot is currently in a stable state with a complete implementation of core translation functionality. The project has fully functional capabilities for:
+The Discord Translation Bot has been enhanced with OCR capabilities, while maintaining its core translation functionality. The project now includes:
 
 - Session-based translation between English, Korean, and Japanese
 - Support for multiple AI models (GPT-4o, Claude, Gemini)
 - Performance optimizations using webhooks and translation memory
-- Comprehensive Docker support for deployment
-- Diagnostic and monitoring utilities
+- Docker support for deployment
+- PaddleOCR integration for image text extraction
+- Visual feedback for OCR processing via emoji reactions
 
 The primary focus is now on:
-1. Testing and optimizing LLM-based language detection
-2. Improving handling of long messages via content filtering and message splitting
-3. Enhancing performance through caching and reduced API calls
-4. Ensuring reliability with proper error handling and fallbacks
+1. Testing and optimizing the new OCR functionality
+2. Monitoring OCR cache performance and memory usage
+3. Ensuring OCR text integrates smoothly with translation workflow
+4. Maintaining responsiveness with parallel image processing
 
 ## Recent Changes
 
-### LLM-Based Language Detection
-- Replaced the `franc` library with GPT-4o-mini for more accurate language detection
-- Improved handling of mixed-language content and short messages
-- Better recognition of casual language patterns and internet slang
+### OCR Integration
+- Added PaddleOCR with specialized models for each language
+- Implemented image preprocessing for better OCR accuracy
+- Created caching system for OCR results
+- Added visual feedback with emoji reactions
+- Updated Docker configuration for OCR dependencies
 
-### Long Message Handling
-- Added message preprocessing to filter out irrelevant content (emojis, timestamps, URLs)
-- Implemented intelligent message splitting for content exceeding Discord's 2000 character limit
-- Created a fallback system for webhook delivery failures
+### System Enhancements
+- Extended message processing to handle image attachments
+- Added parallel processing for multiple images
+- Implemented OCR result caching in `data/ocr-cache`
+- Improved error handling for OCR processing
 
-### Performance Optimizations
-- Implemented batched disk I/O for translation memory
-- Created a buffer system for tracking changes to be written
-- Added webhook caching to avoid recreation
+### Docker Configuration
+- Updated base image to support PaddleOCR
+- Added memory limits for OCR processing
+- Configured model persistence through volumes
+- Optimized container build for OCR dependencies
 
 ## Next Steps
 
 ### Short-Term Priorities
-1. **Full test suite**: Develop comprehensive testing for all translation workflows
-2. **Edge case handling**: Improve handling of mixed messages, very short content, and emoji-heavy text
-3. **Rate limit optimization**: Enhance the queue system to better respect provider rate limits
-4. **Usage analytics**: Add more detailed performance metrics and analytics
+1. **OCR Performance Monitoring**
+   - Track OCR processing times
+   - Monitor cache hit rates
+   - Analyze memory usage patterns
+   - Optimize image preprocessing
+
+2. **Error Handling**
+   - Improve OCR error recovery
+   - Add detailed error logging
+   - Enhance user feedback
+   - Handle edge cases (corrupted images, unsupported formats)
+
+3. **Testing**
+   - Create OCR test suite
+   - Validate multi-language OCR accuracy
+   - Test concurrent image processing
+   - Verify cache performance
+
+4. **Documentation**
+   - Update user guide with OCR features
+   - Document OCR configuration options
+   - Add troubleshooting guides
+   - Document performance considerations
 
 ### Medium-Term Considerations
-1. **Context-aware translations**: Enhance translation quality by maintaining conversation context
-2. **Command enhancements**: Add more user configuration options through commands
-3. **Webhook robustness**: Further improve webhook reliability and fallback mechanisms
-4. **Cost optimization**: Implement smarter model selection based on translation complexity
+1. **OCR Improvements**
+   - Enhance accuracy for short text
+   - Optimize vertical text detection
+   - Add support for handwritten text
+   - Improve multi-language detection
+
+2. **Performance Optimization**
+   - Fine-tune OCR cache settings
+   - Optimize image preprocessing
+   - Improve concurrent processing
+   - Enhance memory management
 
 ### Long-Term Vision
-1. **Additional languages**: Framework for extending beyond current language support
-2. **Custom system prompts**: User-configurable system prompts for different conversational styles
-3. **Voice channel integration**: Potential transcription and translation of voice chat
-4. **Admin dashboard**: Web interface for server administrators to configure and monitor the bot
+1. **Advanced OCR Features**
+   - Layout analysis for complex images
+   - Custom OCR model training
+   - Additional language support
+   - Real-time OCR processing
 
 ## Active Decisions and Considerations
 
-### LLM Provider Strategy
-- Currently supporting all three major providers (OpenAI, Anthropic, Google)
-- Decision to maintain all three for redundancy and user choice
-- Tracking performance and cost metrics to guide future provider recommendations
+### OCR Implementation
+- Using PaddleOCR for best CJK character recognition
+- Maintaining separate models for each language
+- Caching results to improve performance
+- Using emoji reactions for visual feedback
 
-### Language Detection Approach
-- Recent transition to LLM-based detection instead of traditional libraries
-- Monitoring accuracy improvements and potential performance impacts
-- Need to balance accuracy vs. speed, especially for short messages
+### Performance Strategy
+- Parallel processing for multiple images
+- Memory-efficient image handling
+- Optimized caching system
+- Background cache cleanup
 
-### Deployment Considerations
-- Docker as primary deployment method with detailed documentation
-- PM2 as alternative for simpler hosting environments
-- Evaluating resource usage at scale to provide better deployment guidelines
-
-### Performance Balancing
-- Current queue system limited to 3 concurrent translations
-- Translation memory configured to store up to 500 entries
-- Evaluating these limits based on real-world usage patterns
+### Resource Management
+- Docker container with 2GB memory limit
+- Efficient model loading and unloading
+- Optimized image preprocessing
+- Controlled concurrent processing
 
 ### Error Handling Strategy
-- Graceful degradation with fall-back mechanisms
-- Clear user feedback for different error types
-- Automatic retry system under consideration for transient failures
+- Graceful degradation on OCR failures
+- Clear user feedback via reactions
+- Detailed error logging
+- Automatic retry system for transient failures
+
+## Current Status
+
+The Discord Translation Bot is now equipped with OCR capabilities, enabling it to extract text from images while maintaining its core translation functionality. The implementation focuses on performance and reliability, with careful consideration for resource usage and error handling.
+
+Recent upgrades to OCR processing and Docker configuration have enhanced the bot's capabilities while maintaining stability. The focus is now on monitoring performance and optimizing the OCR workflow.
+
+## Known Issues
+
+1. **OCR Processing**
+   - Very small text may have lower accuracy
+   - Complex backgrounds can affect recognition
+   - Handwritten text recognition is limited
+   - Processing time varies with image complexity
+
+2. **Resource Usage**
+   - OCR models increase memory usage
+   - Multiple concurrent images may impact performance
+   - Cache size grows with usage
+   - Docker container requires more resources
+
+3. **Edge Cases**
+   - Mixed language images need optimization
+   - Vertical text detection needs improvement
+   - Some image formats may not process correctly
+   - Large images may require additional processing time

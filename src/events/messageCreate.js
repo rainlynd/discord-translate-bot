@@ -1,6 +1,7 @@
 // Event handler for processing incoming messages
 
 import { translateMessage, formatTranslation, perfMetrics } from '../services/translationService.js';
+import ocrService from '../services/ocrService.js';
 import { loadServerConfig, updateServerStats } from '../utils/serverConfig.js';
 import { sendViaWebhook, splitMessageContent } from '../utils/webhookManager.js';
 import fs from 'fs-extra';
@@ -116,6 +117,53 @@ export default {
     
     // Load server config - only once per message
     const serverConfig = loadServerConfig(serverId);
+
+    // Process any image attachments
+    let ocrText = '';
+    if (message.attachments.size > 0) {
+      try {
+        // Get image attachments
+        const imageAttachments = message.attachments.filter(attachment => 
+          attachment.contentType?.startsWith('image/'));
+
+        if (imageAttachments.size > 0) {
+          // React to show OCR processing
+          await message.react('🔍');
+
+          // Process all images in parallel
+          const imageUrls = imageAttachments.map(attachment => attachment.url);
+          const ocrResults = await ocrService.extractTextFromMultipleImages(
+            imageUrls,
+            serverConfig.mode || 'english' // Use server's language mode for OCR
+          );
+
+          // Combine OCR results
+          ocrText = ocrResults
+            .filter(text => text && text.trim())
+            .join('\n\n');
+
+          // Remove processing reaction and add success reaction
+          await message.reactions.cache.get('🔍')?.remove();
+          if (ocrText) {
+            await message.react('📝');
+          }
+        }
+      } catch (error) {
+        console.error('OCR processing error:', error);
+        // Remove processing reaction and add error reaction
+        await message.reactions.cache.get('🔍')?.remove();
+        await message.react('❌');
+      }
+    }
+
+    // Combine original message with OCR text
+    const fullContent = [
+      message.content,
+      ocrText && `[OCR Text: ${ocrText}]`
+    ].filter(Boolean).join('\n\n');
+    
+    // Update message content with OCR text
+    message.content = fullContent;
     
     // Add this translation task to the queue
     translationQueue.add(async () => {
